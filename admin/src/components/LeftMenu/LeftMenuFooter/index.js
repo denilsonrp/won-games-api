@@ -10,7 +10,7 @@ function LeftMenuFooter() {
   return (
     <Wrapper>
       <div className="poweredBy">
-        Powered by
+        Desenvolvido no curso
         <a key="website" href="https://reactavancado.com.br" target="_blank" rel="noopener noreferrer" style={{ marginLeft: 5 }}>
           React Avançado
         </a>
