@@ -39,6 +39,35 @@ async function create(name, entityName) {
   }
 }
 
+async function createManyToManyData(products) {
+  const developers = {}
+  const publishers = {}
+  const categories = {}
+  const platforms = {}
+
+  products.forEach((product) => {
+    const { developer, publisher, genres, supportedOperatingSystems } = product
+
+    genres &&
+      genres.forEach((item) => {
+        categories[item] = true
+      })
+    supportedOperatingSystems &&
+      supportedOperatingSystems.forEach((item) => {
+        platforms[item] = true
+      })
+    developers[developer] = true
+    publishers[publisher] = true
+  })
+
+  return Promise.all([
+    ...Object.keys(developers).map((name) => create(name, 'developer')),
+    ...Object.keys(publishers).map((name) => create(name, 'publisher')),
+    ...Object.keys(categories).map((name) => create(name, 'category')),
+    ...Object.keys(platforms).map((name) => create(name, 'platform')),
+  ])
+}
+
 module.exports = {
 
   populate: async (params) => {
@@ -46,8 +75,7 @@ module.exports = {
 
     const { data: { products } } = await axios.get(gogApiUrl)
 
-    await create(products[1].publisher, 'publisher')
-    await create(products[1].developer, 'developer')
+    await createManyToManyData([products[2], products[3]])
   }
 
 };
